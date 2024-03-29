@@ -28,21 +28,25 @@
       nueva adivinanza dentro del nuevo rango.
 '''
 
-import flet as ft
+# Importar dependecias
+import flet as ft # Creación de UI (interfaz de usuario)
 import random
-import os
+import os 
 import time
 import subprocess
 
 def main(page: ft.Page):
+    # Inicializar variables
     page.title = "Adivinador de números enteros"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     
-    min_guess = 0
-    max_guess = 1000
-    guess = random.randint(min_guess, max_guess)
-    attempts_history = []
+    min_guess = 0 # Variable de rango mínimo
+    max_guess = 1000 # Variable de rango máximo
+    guess = random.randint(min_guess, max_guess) # Inicializa el número en cualquier número dentro del rango
 
+    """
+        Estilo de la caja de historial de números.
+    """ 
     attempts_container = ft.Column(
         spacing=20,
         height=160,
@@ -50,14 +54,19 @@ def main(page: ft.Page):
         scroll=ft.ScrollMode.ALWAYS
     )
     
+    """
+        Se actualiza el nuevo valor del número a adivinar y se actualiza el historial de número fallidos.
+    """
     def update_guess(new_guess):
         nonlocal guess
         guess = new_guess
         guess_field.value = str(guess)
         attempts_container.controls.append(ft.Text(guess))
-        attempts_history.append(guess)
         page.update()
 
+    """
+        Se limpia la intefaz y se prepara pantalla de felicidades y cierre, la cual dura 2 segundos y se cierra la consola.
+    """
     def closing_animation():
         page.clean()
         icon = ft.Icon(ft.icons.CELEBRATION, size=30)
@@ -67,11 +76,17 @@ def main(page: ft.Page):
         page.update() 
         time.sleep(2)  
         subprocess.call('taskkill /F /T /PID %d' % os.getpid(), shell=True)
-        
+
+    """
+        Finaliza juego, inicia la secuencia de cierre.
+    """ 
     def correct_guess(_):
         print("Se encontro el número correcto")
         closing_animation()
 
+    """
+        Se traen el valor los rangos maximo y minimo, modifica el limite max_guess y genera un nuevo número en base a este rango, después se actualiza.
+    """ 
     def up_guess(_):
         nonlocal min_guess, max_guess
         if min_guess <= max_guess:
@@ -81,6 +96,9 @@ def main(page: ft.Page):
         else:
             print("¡Ya no hay más números para adivinar!")
 
+    """
+        Se traen el valor los rangos maximo y minimo, modifica el limite max_guess y genera un nuevo número en base a este rango, después se actualiza.
+    """ 
     def down_guess(_):
         nonlocal min_guess, max_guess
         if min_guess <= max_guess:
@@ -90,8 +108,15 @@ def main(page: ft.Page):
         else:
             print("¡Ya no hay más números para adivinar!")
 
+    # Interfaz del juego
+    """
+        Estilo de la caja de número.
+    """ 
     guess_field = ft.TextField(value=str(guess), width=100, text_align="center")
 
+    """
+        Creación interfaz de titulo.
+    """ 
     tittle_container = ft.Row(
         controls=[
             ft.Column(
@@ -111,6 +136,9 @@ def main(page: ft.Page):
         spacing=20
     )
     
+    """
+        Creación interfaz de número adivinado, botones para indicar si es correcto, si es más alto o bajo, siguiendolo por el historial de números.
+    """   
     main_container = ft.Row(
         controls=[
             ft.Column(
@@ -137,7 +165,8 @@ def main(page: ft.Page):
         spacing=20
     )
 
+    # Se agregan las interfaces a la página
     page.add(tittle_container, main_container)
 
-# Run the application loop
+# Corre la aplicación
 ft.app(target=main)
