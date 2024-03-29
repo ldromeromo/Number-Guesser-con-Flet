@@ -9,7 +9,7 @@ Este proyecto es una aplicaci처n interactiva construida con Python y Flet, dise�
 
 ## Ejecuci처n
 
-Para ejecutar la aplicaci처n, navega al directorio donde se encuentra este archivo y ejecuta: python app.py
+Para ejecutar la aplicaci처n, navega al directorio donde se encuentra este archivo y ejecuta: `python app.py`
 
 
 Sigue las instrucciones en pantalla para interactuar con la aplicaci처n.
